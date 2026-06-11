@@ -1,0 +1,123 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  password    String
+  firstName   String
+  lastName    String
+  phone       String?
+  dateOfBirth String?
+  role        String   @default("PATIENT") // PATIENT | ADMIN
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  appointments  Appointment[]
+  intakeForms   IntakeForm[]
+}
+
+model Doctor {
+  id           String   @id @default(cuid())
+  name         String
+  title        String
+  role         String   // Psychiatrist | Psychologist
+  bio          String
+  initials     String
+  credentials  String
+  photoUrl     String?
+  languages    String   // JSON array stored as string
+  specialties  String   // JSON array stored as string
+  tags         String   // JSON array stored as string
+  availableDays String  // JSON array stored as string
+  rating       Float    @default(4.9)
+  patientCount Int      @default(0)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  appointments  Appointment[]
+}
+
+model Appointment {
+  id          String   @id @default(cuid())
+  userId      String
+  doctorId    String
+  date        String   // ISO date string YYYY-MM-DD
+  time        String   // e.g. "10:00 AM"
+  sessionType String   @default("In-Person") // In-Person | Telehealth
+  patientType String   @default("New Patient")
+  status      String   @default("CONFIRMED") // PENDING | CONFIRMED | CANCELLED | COMPLETED
+  notes       String?
+  insurance   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  doctor Doctor @relation(fields: [doctorId], references: [id])
+}
+
+model IntakeForm {
+  id               String   @id @default(cuid())
+  userId           String
+  formType         String   // registration | history | hipaa | telehealth
+  data             String   // JSON string of form fields
+  submittedAt      DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model BlogPost {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  category  String
+  excerpt   String
+  body      String
+  author    String
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  topic     String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+model BlockedSlot {
+  id       String @id @default(cuid())
+  doctorId String
+  date     String
+  time     String
+  reason   String @default("blocked")
+
+  @@unique([doctorId, date, time])
+}
+
+model SiteContent {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  label     String   @default("")
+  section   String   @default("general")
+  updatedAt DateTime @updatedAt
+}
