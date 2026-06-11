@@ -20,10 +20,13 @@ export default async function HomePage() {
   const [doctors, posts, heroImage] = await Promise.all([getDoctors(), getLatestPosts(), getHeroImage()]);
 
   return (
-    <div className="slides-wrapper">
+    <>
 
       {/* ── Hero ──────────────────────────────────────────────────────── */}
-      <section className="slide-section relative overflow-hidden">
+      <section
+        className="relative flex flex-col overflow-hidden"
+        style={{ minHeight: "calc(100svh - 108px)" }}
+      >
         {/* Background */}
         {heroImage ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -94,8 +97,8 @@ export default async function HomePage() {
       </section>
 
       {/* ── Services ──────────────────────────────────────────────────── */}
-      <section className="slide-section bg-slate-50">
-        <div className="flex-1 flex flex-col justify-center py-6">
+      <section className="bg-slate-50 py-20">
+        <div>
           <div className="max-w-6xl mx-auto px-6 w-full">
 
             {/* Header row + clinic stats */}
@@ -192,8 +195,8 @@ export default async function HomePage() {
       </section>
 
       {/* ── Why Us ────────────────────────────────────────────────────── */}
-      <section className="slide-section">
-        <div className="flex-1 flex flex-col justify-center py-6">
+      <section className="py-20">
+        <div>
           <div className="max-w-6xl mx-auto px-6 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
 
@@ -276,8 +279,8 @@ export default async function HomePage() {
       </section>
 
       {/* ── Specialists ───────────────────────────────────────────────── */}
-      <section className="slide-section bg-slate-50">
-        <div className="flex-1 flex flex-col justify-center py-8">
+      <section className="bg-slate-50 py-20">
+        <div>
           <div className="max-w-6xl mx-auto px-6 w-full">
             <div className="text-center mb-8">
               <div className="section-tag">Our Team</div>
@@ -330,28 +333,63 @@ export default async function HomePage() {
       </section>
 
       {/* ── Testimonials ──────────────────────────────────────────────── */}
-      <section className="slide-section">
-        <div className="flex-1 flex flex-col justify-center py-8">
-          <div className="max-w-6xl mx-auto px-6 w-full">
-            <div className="text-center mb-10">
-              <div className="section-tag">Patient Voices</div>
-              <h2 className="text-3xl font-bold mt-2">What Our Patients Say</h2>
-              <p className="text-slate-500 mt-2">Anonymous reviews shared with consent.</p>
+      <section className="py-24 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 relative overflow-hidden">
+        {/* Decorative blobs */}
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"/>
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-indigo-600/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4"/>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[260px] font-serif text-white/[0.02] leading-none select-none">"</div>
+        </div>
+
+        <div className="max-w-6xl mx-auto px-6 relative z-10">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
+            <div>
+              <span className="inline-block bg-white/10 text-blue-300 px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase border border-white/10 mb-3">Patient Voices</span>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight">What Our<br/>Patients Say</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <p className="text-slate-400 text-sm max-w-xs">Anonymous reviews shared with full consent. Real stories, real change.</p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
+            {/* Featured */}
+            <div className="lg:col-span-3 bg-gradient-to-br from-blue-600/25 to-indigo-600/15 border border-blue-500/25 rounded-3xl p-8 flex flex-col justify-between">
+              <div>
+                <div className="flex gap-0.5 mb-5">
+                  {"★★★★★".split("").map((s,i)=><span key={i} className="text-amber-400 text-xl">{s}</span>)}
+                </div>
+                <svg width="40" height="30" viewBox="0 0 40 30" fill="none" className="text-blue-400/40 mb-4"><path d="M0 30V18C0 8.4 5.6 2.4 16.8 0L18.4 3.2C13.2 4.8 10 8 9.6 12H16V30H0ZM24 30V18C24 8.4 29.6 2.4 40.8 0L42.4 3.2C37.2 4.8 34 8 33.6 12H40V30H24Z" fill="currentColor"/></svg>
+                <p className="text-white text-lg sm:text-xl leading-relaxed font-light">
+                  Coming to MindWell was the best decision I ever made. Dr. Mitchell helped me understand my anxiety and gave me real tools to manage it. I feel like myself again.
+                </p>
+              </div>
+              <div className="flex items-center gap-4 mt-8 pt-6 border-t border-white/10">
+                <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm shrink-0">A.T</div>
+                <div>
+                  <div className="text-white font-semibold text-sm">Anonymous Patient</div>
+                  <div className="text-blue-300 text-xs mt-0.5">Anxiety &amp; Depression · 8 months</div>
+                </div>
+                <span className="ml-auto bg-emerald-500/20 text-emerald-400 text-[10px] font-semibold px-2.5 py-1 rounded-full border border-emerald-500/20 shrink-0">Verified</span>
+              </div>
+            </div>
+
+            {/* Two side testimonials */}
+            <div className="lg:col-span-2 flex flex-col gap-5">
               {[
-                { text:"Coming to MindWell was the best decision I ever made. Dr. Mitchell helped me understand my anxiety and gave me real tools to manage it. I feel like myself again.", by:"A.T.", label:"Anxiety & Depression · 8 months" },
-                { text:"Dr. Okafor took the time to really listen. The medication he prescribed has changed my life. I finally feel stable after years of struggling.", by:"M.R.", label:"Bipolar Disorder · 1 year" },
-                { text:"The telehealth option made it possible for me to get help. Dr. Nair is incredibly warm and skilled. My relationship has improved so much since we started couples therapy.", by:"S.K.", label:"Couples Therapy · 6 months" },
+                { text:"Dr. Okafor took the time to really listen. The medication he prescribed has changed my life. I finally feel stable after years of struggling.", by:"M.R.", label:"Bipolar Disorder · 1 year", color:"from-indigo-600/20 to-violet-600/10", border:"border-indigo-500/20" },
+                { text:"The telehealth option made it possible for me to get help. Dr. Nair is incredibly warm and skilled. My relationship has improved so much.", by:"S.K.", label:"Couples Therapy · 6 months", color:"from-violet-600/20 to-pink-600/10", border:"border-violet-500/20" },
               ].map((t)=>(
-                <div key={t.by} className="card p-6">
-                  <div className="flex gap-1 text-amber-400 mb-3">{"★★★★★".split("").map((s,i)=><span key={i}>{s}</span>)}</div>
-                  <p className="text-slate-700 italic leading-relaxed mb-5 text-sm">"{t.text}"</p>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">{t.by}</div>
-                    <div>
-                      <div className="font-semibold text-sm">Anonymous Patient</div>
-                      <div className="text-xs text-slate-500">{t.label}</div>
+                <div key={t.by} className={`bg-gradient-to-br ${t.color} border ${t.border} rounded-2xl p-6 flex flex-col justify-between flex-1`}>
+                  <div>
+                    <div className="flex gap-0.5 mb-3">
+                      {"★★★★★".split("").map((s,i)=><span key={i} className="text-amber-400 text-sm">{s}</span>)}
+                    </div>
+                    <p className="text-slate-200 text-sm leading-relaxed">"{t.text}"</p>
+                  </div>
+                  <div className="flex items-center gap-3 mt-5 pt-4 border-t border-white/10">
+                    <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white font-bold text-xs shrink-0">{t.by}</div>
+                    <div className="text-xs">
+                      <div className="text-white font-medium">Anonymous Patient</div>
+                      <div className="text-slate-500 mt-0.5">{t.label}</div>
                     </div>
                   </div>
                 </div>
@@ -363,56 +401,148 @@ export default async function HomePage() {
 
       {/* ── Blog ──────────────────────────────────────────────────────── */}
       {posts.length > 0 && (
-        <section className="slide-section bg-slate-50">
-          <div className="flex-1 flex flex-col justify-center py-8">
-            <div className="max-w-6xl mx-auto px-6 w-full">
-              <div className="text-center mb-8">
-                <div className="section-tag">From Our Specialists</div>
-                <h2 className="text-3xl font-bold mt-2">Mental Health Articles</h2>
+        <section className="py-24 bg-white">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
+              <div>
+                <span className="section-tag">From Our Specialists</span>
+                <h2 className="text-3xl sm:text-4xl font-bold mt-2 leading-tight">Mental Health<br/>Articles</h2>
               </div>
+              <Link href="/blog" className="btn btn-outline shrink-0">View All Articles →</Link>
+            </div>
+
+            {posts.length >= 3 ? (
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
+                {/* Featured article */}
+                <Link href={`/blog/${posts[0].slug}`} className="lg:col-span-3 group rounded-3xl overflow-hidden border border-slate-200 hover:border-blue-300 hover:shadow-xl transition-all duration-300 flex flex-col">
+                  <div className="relative h-56 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 overflow-hidden">
+                    <div className="absolute inset-0 flex items-center justify-center opacity-10">
+                      <svg width="120" height="120" fill="none" stroke="white" strokeWidth="1" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                    </div>
+                    <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/60 to-transparent">
+                      <span className="inline-block bg-blue-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">{posts[0].category}</span>
+                    </div>
+                  </div>
+                  <div className="p-6 flex flex-col flex-1">
+                    <h3 className="font-bold text-lg text-slate-900 mb-2 leading-snug group-hover:text-blue-600 transition-colors">{posts[0].title}</h3>
+                    <p className="text-sm text-slate-500 leading-relaxed flex-1">{posts[0].excerpt}</p>
+                    <div className="flex items-center justify-between mt-5 pt-4 border-t border-slate-100">
+                      <div className="flex items-center gap-2">
+                        <div className="w-7 h-7 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xs font-bold">{posts[0].author[0]}</div>
+                        <span className="text-xs font-medium text-slate-600">{posts[0].author}</span>
+                      </div>
+                      <span className="text-xs text-slate-400">{new Date(posts[0].createdAt).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})}</span>
+                    </div>
+                  </div>
+                </Link>
+
+                {/* 2 compact articles */}
+                <div className="lg:col-span-2 flex flex-col gap-5">
+                  {posts.slice(1,3).map((post,i)=>(
+                    <Link key={post.id} href={`/blog/${post.slug}`} className="group flex gap-4 rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-lg transition-all duration-300 p-4 overflow-hidden flex-1">
+                      <div className={`w-20 shrink-0 rounded-xl bg-gradient-to-br ${i===0?"from-indigo-100 to-purple-100":"from-emerald-100 to-teal-100"} flex items-center justify-center`}>
+                        <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.5" className={i===0?"text-indigo-400":"text-emerald-500"} viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                      </div>
+                      <div className="flex flex-col justify-between min-w-0">
+                        <div>
+                          <span className="inline-block text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-1">{post.category}</span>
+                          <h3 className="font-semibold text-slate-900 text-sm leading-snug group-hover:text-blue-600 transition-colors line-clamp-2">{post.title}</h3>
+                        </div>
+                        <div className="flex items-center gap-2 mt-2 text-xs text-slate-400">
+                          <span>{post.author}</span>
+                          <span>·</span>
+                          <span>{new Date(post.createdAt).toLocaleDateString("en-US",{month:"short",day:"numeric"})}</span>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {posts.map((post) => (
-                  <Link key={post.id} href={`/blog/${post.slug}`} className="card-hover overflow-hidden">
-                    <div className="h-36 bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-blue-400">
-                      <svg width="36" height="36" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                {posts.map((post)=>(
+                  <Link key={post.id} href={`/blog/${post.slug}`} className="group rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-lg transition-all overflow-hidden">
+                    <div className="h-40 bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-blue-300">
+                      <svg width="36" height="36" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
                     </div>
                     <div className="p-4">
-                      <span className="inline-block bg-blue-50 text-blue-600 text-xs font-semibold px-2.5 py-1 rounded-full border border-blue-100 mb-2">{post.category}</span>
-                      <h3 className="font-semibold text-slate-900 mb-1 leading-snug text-sm">{post.title}</h3>
-                      <p className="text-xs text-slate-500">{post.excerpt}</p>
-                      <div className="mt-3 flex justify-between text-xs text-slate-400">
-                        <span>{post.author}</span>
-                        <span>{new Date(post.createdAt).toLocaleDateString("en-US",{month:"short",day:"numeric"})}</span>
-                      </div>
+                      <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">{post.category}</span>
+                      <h3 className="font-semibold text-slate-900 mt-1 text-sm leading-snug group-hover:text-blue-600 transition-colors">{post.title}</h3>
+                      <p className="text-xs text-slate-500 mt-1">{post.excerpt}</p>
                     </div>
                   </Link>
                 ))}
               </div>
-              <div className="text-center mt-7">
-                <Link href="/blog" className="btn btn-outline">View All Articles</Link>
-              </div>
-            </div>
+            )}
           </div>
         </section>
       )}
 
       {/* ── CTA ───────────────────────────────────────────────────────── */}
-      <section className="slide-section bg-gradient-to-br from-blue-600 to-blue-700">
-        <div className="flex-1 flex flex-col justify-center py-8">
-          <div className="max-w-6xl mx-auto px-6 w-full text-center text-white">
-            <h2 className="text-3xl font-bold mb-4">Ready to Take the First Step?</h2>
-            <p className="text-blue-100 text-lg mb-10">Book your appointment today. Telehealth and in-person sessions available.</p>
-            <div className="flex gap-3 justify-center flex-wrap">
-              <Link href="/book" className="btn btn-white btn-lg">
-                <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-                Book Appointment
-              </Link>
-              <Link href="/contact" className="btn btn-lg border-2 border-white/40 text-white hover:bg-white/10">Contact Us</Link>
+      <section className="py-24 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/15 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3"/>
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-600/15 rounded-full blur-3xl -translate-x-1/4 translate-y-1/4"/>
+        </div>
+
+        <div className="max-w-6xl mx-auto px-6 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+            {/* Left: main content */}
+            <div>
+              <span className="inline-block bg-white/10 text-blue-300 px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase border border-white/10 mb-6">Get Started Today</span>
+              <h2 className="text-4xl sm:text-5xl font-extrabold text-white leading-[1.1] tracking-tight mb-5">
+                Ready to Take<br/>
+                <span className="text-blue-400">the First Step?</span>
+              </h2>
+              <p className="text-slate-300 text-lg leading-relaxed mb-8 max-w-md">
+                Your mental health journey starts with one appointment. Same-week availability, telehealth and in-person options.
+              </p>
+              <div className="flex flex-wrap gap-3 mb-8">
+                <Link href="/book" className="inline-flex items-center gap-2.5 bg-blue-600 hover:bg-blue-500 text-white px-7 py-3.5 rounded-xl font-semibold text-base transition-all shadow-xl shadow-blue-900/50 hover:-translate-y-0.5">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                  Book Appointment
+                </Link>
+                <Link href="/contact" className="inline-flex items-center gap-2.5 bg-white/10 hover:bg-white/15 text-white px-7 py-3.5 rounded-xl font-semibold text-base transition-all border border-white/20 hover:-translate-y-0.5">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                  Talk to Us
+                </Link>
+              </div>
+              {/* Trust row */}
+              <div className="flex flex-wrap gap-5 text-sm text-slate-400">
+                {[["shield","HIPAA Certified"],["lock","100% Confidential"],["calendar","Same-week Appts"]].map(([icon,label])=>(
+                  <div key={label} className="flex items-center gap-1.5">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-blue-400">
+                      {icon==="shield"   && <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>}
+                      {icon==="lock"     && <><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></>}
+                      {icon==="calendar" && <><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></>}
+                    </svg>
+                    {label}
+                  </div>
+                ))}
+              </div>
             </div>
+
+            {/* Right: floating stat cards */}
+            <div className="hidden lg:grid grid-cols-2 gap-4">
+              {[
+                { value:"500+", label:"Patients Helped", sub:"Since 2014", color:"from-blue-600/30 to-blue-800/20", border:"border-blue-500/20", accent:"text-blue-300" },
+                { value:"4.9★", label:"Patient Rating",  sub:"Based on 200+ reviews", color:"from-amber-500/20 to-orange-600/10", border:"border-amber-500/20", accent:"text-amber-300" },
+                { value:"10+",  label:"Years Experience", sub:"Board-certified team", color:"from-indigo-600/25 to-violet-600/15", border:"border-indigo-500/20", accent:"text-indigo-300" },
+                { value:"2×",   label:"Weekly Intake",   sub:"New patient slots open", color:"from-emerald-600/20 to-teal-600/10", border:"border-emerald-500/20", accent:"text-emerald-300" },
+              ].map((s)=>(
+                <div key={s.label} className={`bg-gradient-to-br ${s.color} border ${s.border} rounded-2xl p-5`}>
+                  <div className={`text-3xl font-extrabold ${s.accent} leading-none mb-1`}>{s.value}</div>
+                  <div className="text-white text-sm font-semibold">{s.label}</div>
+                  <div className="text-slate-500 text-xs mt-1">{s.sub}</div>
+                </div>
+              ))}
+            </div>
+
           </div>
         </div>
       </section>
 
-    </div>
+    </>
   );
 }
