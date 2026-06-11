@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 type DoctorFull = {
   id: string; name: string; title: string; credentials: string;
@@ -147,13 +148,12 @@ function DoctorCard({
 
       {/* Photo URL */}
       <div>
-        <label className="block text-xs font-medium text-slate-600 mb-1">Photo URL</label>
-        <input
-          type="url"
+        <label className="block text-xs font-medium text-slate-600 mb-1">Photo</label>
+        <ImageUpload
           value={photoUrl}
-          onChange={e => setPhotoUrl(e.target.value)}
-          placeholder="https://images.unsplash.com/..."
-          className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onChange={v => { setPhotoUrl(v); setPhotoPreview(v); }}
+          placeholder="https://images.unsplash.com/…"
+          previewClass="w-full h-24 object-cover rounded-lg border border-slate-200 mt-2"
         />
       </div>
 
@@ -254,7 +254,6 @@ function ImageRow({
   triggerSave: (label: string, action: () => Promise<void>) => void;
 }) {
   const [url, setUrl] = useState(initialValue);
-  const [preview, setPreview] = useState(initialValue);
   const [saved, setSaved] = useState(false);
 
   function handleSave() {
@@ -264,45 +263,31 @@ function ImageRow({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ key: imageKey, value: url, label, section }),
       });
-      setPreview(url);
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     });
   }
 
   return (
-    <div className="flex gap-4 items-start py-4 border-b border-slate-100 last:border-0">
-      <div className="w-20 h-14 rounded-lg bg-slate-100 border border-slate-200 overflow-hidden shrink-0 flex items-center justify-center">
-        {preview ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={preview} alt={label} className="w-full h-full object-cover" onError={() => setPreview("")} />
-        ) : (
-          <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-slate-300" viewBox="0 0 24 24">
-            <rect x="3" y="3" width="18" height="18" rx="2"/>
-            <circle cx="8.5" cy="8.5" r="1.5"/>
-            <polyline points="21,15 16,10 5,21"/>
-          </svg>
-        )}
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-slate-700 mb-1">{label}</p>
-        <div className="flex gap-2">
-          <input
-            type="url"
+    <div className="py-4 border-b border-slate-100 last:border-0">
+      <p className="text-sm font-medium text-slate-700 mb-2">{label}</p>
+      <div className="flex gap-2 items-start">
+        <div className="flex-1 min-w-0">
+          <ImageUpload
             value={url}
-            onChange={e => setUrl(e.target.value)}
-            placeholder="https://images.unsplash.com/..."
-            className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-0"
+            onChange={v => setUrl(v)}
+            placeholder="https://images.unsplash.com/…"
+            previewClass="w-full h-20 object-cover rounded-lg border border-slate-200 mt-2"
           />
-          <button
-            onClick={handleSave}
-            className={`shrink-0 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-              saved ? "bg-green-50 text-green-700 border border-green-200" : "bg-blue-600 text-white hover:bg-blue-700"
-            }`}
-          >
-            {saved ? "Saved ✓" : "Save"}
-          </button>
         </div>
+        <button
+          onClick={handleSave}
+          className={`shrink-0 mt-0.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+            saved ? "bg-green-50 text-green-700 border border-green-200" : "bg-blue-600 text-white hover:bg-blue-700"
+          }`}
+        >
+          {saved ? "✓" : "Save"}
+        </button>
       </div>
     </div>
   );

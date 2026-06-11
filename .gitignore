@@ -43,3 +43,10 @@ yarn-error.log*
 # TypeScript incremental cache
 *.tsbuildinfo
 next-env.d.ts
+
+# Claude Code local settings
+.claude/
+
+# Uploaded images (local dev only — use cloud storage in production)
+/public/uploads/*
+!/public/uploads/.gitkeep

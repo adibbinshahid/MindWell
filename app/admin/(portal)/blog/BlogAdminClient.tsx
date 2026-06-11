@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import ImageUpload from "@/components/admin/ImageUpload";
 
 type Post = { id: string; title: string; slug: string; category: string; excerpt: string; body: string; author: string; imageUrl?: string | null; published: boolean; createdAt: string };
 type View = "list" | "editor";
@@ -92,17 +93,13 @@ export default function BlogAdminClient({ initialPosts }: { initialPosts: Post[]
                   </select>
                 </div>
                 <div>
-                  <label className="form-label">Cover Image URL</label>
-                  <input
-                    className="form-control"
+                  <label className="form-label">Cover Image</label>
+                  <ImageUpload
                     value={editing.imageUrl ?? ""}
-                    onChange={up("imageUrl")}
+                    onChange={v => setEditing(p => p ? { ...p, imageUrl: v } : p)}
                     placeholder="https://example.com/image.jpg"
+                    previewClass="w-full h-28 object-cover rounded-lg border border-slate-200 mt-2"
                   />
-                  {editing.imageUrl && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={editing.imageUrl} alt="preview" className="mt-2 w-full h-28 object-cover rounded-lg border border-slate-200"/>
-                  )}
                 </div>
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input type="checkbox" checked={!!editing.published}
