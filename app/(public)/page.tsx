@@ -95,75 +95,181 @@ export default async function HomePage() {
 
       {/* ── Services ──────────────────────────────────────────────────── */}
       <section className="slide-section bg-slate-50">
-        <div className="flex-1 flex flex-col justify-center py-8">
+        <div className="flex-1 flex flex-col justify-center py-6">
           <div className="max-w-6xl mx-auto px-6 w-full">
-            <div className="text-center mb-8">
-              <div className="section-tag">What We Offer</div>
-              <h2 className="text-3xl font-bold mt-2">Our Services</h2>
-              <p className="text-slate-500 mt-2">Comprehensive mental health care tailored to your unique needs.</p>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[
-                { iconKey:"activity", title:"Psychiatric Evaluation", desc:"Comprehensive diagnosis and treatment planning.", href:"/services#psychiatry" },
-                { iconKey:"message", title:"Individual Therapy", desc:"One-on-one sessions with a licensed psychologist.", href:"/services#therapy" },
-                { iconKey:"users", title:"Couples Therapy", desc:"Strengthen your relationship with professional support.", href:"/services#therapy" },
-                { iconKey:"video", title:"Telehealth Sessions", desc:"Secure video sessions from anywhere.", href:"/services#telehealth" },
-                { iconKey:"plus-circle", title:"Medication Management", desc:"Careful psychiatric medication monitoring.", href:"/services#psychiatry" },
-                { iconKey:"clipboard", title:"Conditions Treated", desc:"Anxiety, depression, ADHD, OCD, PTSD & more.", href:"/conditions" },
-                { iconKey:"wind", title:"Stress & Anxiety", desc:"Evidence-based strategies using CBT and mindfulness.", href:"/services#therapy" },
-                { iconKey:"file-text", title:"New Patient Intake", desc:"Complete forms online before your first visit.", href:"/resources#forms" },
-              ].map((s)=>(
-                <Link key={s.title} href={s.href} className="card-hover p-4 group">
-                  <div className="w-9 h-9 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-3">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                      {s.iconKey==="activity" && <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>}
-                      {s.iconKey==="message" && <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>}
-                      {s.iconKey==="users" && <><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></>}
-                      {s.iconKey==="video" && <><polygon points="23,7 16,12 23,17 23,7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></>}
-                      {s.iconKey==="plus-circle" && <><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></>}
-                      {s.iconKey==="clipboard" && <><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></>}
-                      {s.iconKey==="wind" && <><path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"/></>}
-                      {s.iconKey==="file-text" && <><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></>}
-                    </svg>
+
+            {/* Header row + clinic stats */}
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-5">
+              <div>
+                <div className="section-tag">What We Offer</div>
+                <h2 className="text-3xl font-bold mt-1">Our Services</h2>
+                <p className="text-slate-500 mt-1 text-sm">Comprehensive mental health care for every stage of your journey.</p>
+              </div>
+              <div className="flex gap-5 shrink-0">
+                {[["500+","Patients Helped"],["4.9★","Avg Rating"],["10+","Yrs Experience"],["HIPAA","Certified"]].map(([v,l])=>(
+                  <div key={l} className="text-center">
+                    <div className="font-extrabold text-blue-600 text-lg leading-none">{v}</div>
+                    <div className="text-slate-400 text-[10px] mt-0.5 leading-none">{l}</div>
                   </div>
-                  <h3 className="font-semibold text-slate-900 mb-1 text-sm">{s.title}</h3>
-                  <p className="text-xs text-slate-500 mb-2 leading-relaxed">{s.desc}</p>
-                  <span className="text-blue-600 text-xs font-semibold">Learn More →</span>
-                </Link>
-              ))}
+                ))}
+              </div>
             </div>
+
+            {/* 2-col layout: featured cards left + service list right */}
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+
+              {/* Featured services — 2 tall cards */}
+              <div className="lg:col-span-2 grid grid-cols-2 lg:grid-cols-1 gap-3">
+                <Link href="/services#psychiatry" className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl p-5 text-white hover:-translate-y-0.5 transition-all group">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                      <svg width="20" height="20" fill="none" stroke="white" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+                    </div>
+                    <span className="bg-white/20 text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide">MOST POPULAR</span>
+                  </div>
+                  <h3 className="font-bold text-base mb-1">Psychiatric Evaluation</h3>
+                  <p className="text-blue-100 text-xs mb-3 leading-relaxed">Comprehensive mental health assessment, diagnosis, and personalized treatment planning by board-certified psychiatrists.</p>
+                  <div className="flex flex-wrap gap-1">
+                    {["Anxiety","Depression","ADHD","Bipolar"].map(t=><span key={t} className="bg-white/15 text-[10px] px-2 py-0.5 rounded-full">{t}</span>)}
+                  </div>
+                  <div className="mt-3 pt-3 border-t border-white/20 flex items-center justify-between text-xs text-blue-200">
+                    <span>In-Person &amp; Telehealth</span>
+                    <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  </div>
+                </Link>
+                <Link href="/services#therapy" className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-5 text-white hover:-translate-y-0.5 transition-all group">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
+                      <svg width="20" height="20" fill="none" stroke="white" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                    </div>
+                    <span className="bg-emerald-500/30 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide">EVIDENCE-BASED</span>
+                  </div>
+                  <h3 className="font-bold text-base mb-1">Individual Therapy</h3>
+                  <p className="text-slate-300 text-xs mb-3 leading-relaxed">One-on-one sessions using CBT, DBT, and mindfulness techniques tailored to your specific goals.</p>
+                  <div className="flex flex-wrap gap-1">
+                    {["CBT","DBT","Trauma","PTSD"].map(t=><span key={t} className="bg-white/10 text-[10px] px-2 py-0.5 rounded-full">{t}</span>)}
+                  </div>
+                  <div className="mt-3 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
+                    <span>50-min sessions</span>
+                    <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  </div>
+                </Link>
+              </div>
+
+              {/* 6 compact services — 2-col grid */}
+              <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {[
+                  { iconKey:"users",       title:"Couples Therapy",      desc:"Rebuild trust and communication.", tags:["Relationships","Conflict"], href:"/services#therapy" },
+                  { iconKey:"video",       title:"Telehealth",            desc:"Secure video from anywhere.",     tags:["Remote","Same-day"],        href:"/services#telehealth" },
+                  { iconKey:"plus-circle", title:"Medication Mgmt",       desc:"Psychiatric medication review.",  tags:["Monitoring","Refills"],      href:"/services#psychiatry" },
+                  { iconKey:"clipboard",   title:"Conditions Treated",    desc:"Anxiety, OCD, PTSD & more.",     tags:["Diagnosis","Treatment"],     href:"/conditions" },
+                  { iconKey:"wind",        title:"Stress & Anxiety",      desc:"CBT-based coping strategies.",   tags:["CBT","Mindfulness"],         href:"/services#therapy" },
+                  { iconKey:"file-text",   title:"New Patient Intake",    desc:"Online forms before first visit.",tags:["Quick","Paperless"],        href:"/resources#forms" },
+                ].map((s)=>(
+                  <Link key={s.title} href={s.href} className="bg-white border border-slate-200 rounded-xl p-4 hover:border-blue-300 hover:shadow-md hover:-translate-y-0.5 transition-all group">
+                    <div className="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center mb-2.5">
+                      <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                        {s.iconKey==="users"       && <><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></>}
+                        {s.iconKey==="video"       && <><polygon points="23,7 16,12 23,17 23,7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></>}
+                        {s.iconKey==="plus-circle" && <><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></>}
+                        {s.iconKey==="clipboard"   && <><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></>}
+                        {s.iconKey==="wind"        && <><path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"/></>}
+                        {s.iconKey==="file-text"   && <><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></>}
+                      </svg>
+                    </div>
+                    <h4 className="font-semibold text-slate-900 text-xs mb-1 leading-snug">{s.title}</h4>
+                    <p className="text-[11px] text-slate-500 mb-2 leading-relaxed">{s.desc}</p>
+                    <div className="flex flex-wrap gap-1">
+                      {s.tags.map(t=><span key={t} className="bg-blue-50 text-blue-600 text-[10px] px-1.5 py-0.5 rounded-full font-medium">{t}</span>)}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
 
       {/* ── Why Us ────────────────────────────────────────────────────── */}
       <section className="slide-section">
-        <div className="flex-1 flex flex-col justify-center py-8">
+        <div className="flex-1 flex flex-col justify-center py-6">
           <div className="max-w-6xl mx-auto px-6 w-full">
-            <div className="text-center mb-10">
-              <div className="section-tag">Why MindWell</div>
-              <h2 className="text-3xl font-bold mt-2">Care You Can Trust</h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { iconKey:"award", title:"Experienced Professionals", desc:"Licensed psychiatrists and psychologists with 10+ years experience." },
-                { iconKey:"lock", title:"Confidential & Secure", desc:"Your privacy is our highest priority. Fully HIPAA-compliant." },
-                { iconKey:"shield-check", title:"Evidence-Based Care", desc:"Proven treatments including CBT, DBT, and medication management." },
-                { iconKey:"calendar", title:"Easy Booking", desc:"Book online in minutes. In-person or telehealth available." },
-              ].map((w)=>(
-                <div key={w.title} className="text-center p-6">
-                  <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                      {w.iconKey==="award" && <><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></>}
-                      {w.iconKey==="lock" && <><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></>}
-                      {w.iconKey==="shield-check" && <><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9,12 11,14 15,10"/></>}
-                      {w.iconKey==="calendar" && <><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></>}
-                    </svg>
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+
+              {/* Left: header + stat boxes */}
+              <div className="lg:col-span-2">
+                <div className="section-tag mb-2">Why MindWell</div>
+                <h2 className="text-3xl font-bold mb-1">Care You<br/>Can Trust</h2>
+                <p className="text-slate-500 text-sm mb-5">Every decision we make is guided by clinical excellence, patient dignity, and lasting results.</p>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-blue-600 text-white rounded-2xl p-4">
+                    <div className="text-3xl font-extrabold leading-none">500+</div>
+                    <div className="text-blue-200 text-xs mt-1">Patients Helped</div>
                   </div>
-                  <h4 className="font-semibold mb-2">{w.title}</h4>
-                  <p className="text-sm text-slate-500">{w.desc}</p>
+                  <div className="bg-slate-900 text-white rounded-2xl p-4">
+                    <div className="text-3xl font-extrabold leading-none">4.9<span className="text-amber-400 text-xl">★</span></div>
+                    <div className="text-slate-400 text-xs mt-1">Average Rating</div>
+                  </div>
+                  <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4">
+                    <div className="text-3xl font-extrabold leading-none text-blue-700">10+</div>
+                    <div className="text-slate-500 text-xs mt-1">Years in Practice</div>
+                  </div>
+                  <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-4">
+                    <div className="text-2xl font-extrabold leading-none text-emerald-700">HIPAA</div>
+                    <div className="text-slate-500 text-xs mt-1">100% Compliant</div>
+                  </div>
                 </div>
-              ))}
+              </div>
+
+              {/* Right: detailed feature rows */}
+              <div className="lg:col-span-3 flex flex-col gap-3">
+                {[
+                  {
+                    iconKey:"award", color:"blue",
+                    title:"Board-Certified Specialists",
+                    points:["Licensed psychiatrists & psychologists with 10+ years","Ongoing training in latest evidence-based protocols","Specialized in anxiety, mood disorders, trauma & ADHD"],
+                  },
+                  {
+                    iconKey:"lock", color:"slate",
+                    title:"Complete Privacy & Confidentiality",
+                    points:["HIPAA-compliant encrypted patient records","Anonymous scheduling available on request","Zero data sharing — your story stays with us"],
+                  },
+                  {
+                    iconKey:"shield-check", color:"blue",
+                    title:"Evidence-Based Treatment Methods",
+                    points:["CBT, DBT, EMDR, and mindfulness-based therapies","Medication management with continuous monitoring","Outcome tracking every 4 weeks to measure progress"],
+                  },
+                  {
+                    iconKey:"calendar", color:"emerald",
+                    title:"Accessible & Flexible Care",
+                    points:["In-person and telehealth sessions — same week availability","Most major insurance plans accepted","Sliding scale fees for those with financial need"],
+                  },
+                ].map((w)=>(
+                  <div key={w.title} className="flex gap-4 items-start p-4 rounded-xl bg-slate-50 hover:bg-blue-50/60 border border-transparent hover:border-blue-100 transition-all">
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${w.color==="emerald" ? "bg-emerald-100 text-emerald-700" : w.color==="slate" ? "bg-slate-800 text-white" : "bg-blue-600 text-white"}`}>
+                      <svg width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                        {w.iconKey==="award"        && <><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></>}
+                        {w.iconKey==="lock"         && <><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></>}
+                        {w.iconKey==="shield-check" && <><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9,12 11,14 15,10"/></>}
+                        {w.iconKey==="calendar"     && <><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></>}
+                      </svg>
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="font-semibold text-slate-900 text-sm mb-1.5">{w.title}</h4>
+                      <ul className="space-y-1">
+                        {w.points.map(pt=>(
+                          <li key={pt} className="flex items-start gap-1.5 text-xs text-slate-600">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500 shrink-0 mt-0.5"><polyline points="20,6 9,17 4,12"/></svg>
+                            {pt}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
             </div>
           </div>
         </div>
