@@ -38,53 +38,58 @@ export default async function HomePage() {
             <div className="absolute top-1/2 left-1/2 w-[300px] h-[300px] bg-blue-400/10 rounded-full blur-2xl -translate-x-1/2 -translate-y-1/2" />
           </div>
         )}
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/35 to-black/65" aria-hidden="true" />
+        {/* Dark overlay — lightened so the image shows through nicely */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/50" aria-hidden="true" />
 
         {/* Content — flex-1 fills available height, centers content */}
-        <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full max-w-4xl mx-auto px-6 text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white/90 px-4 py-1.5 rounded-full text-sm font-medium border border-white/20 mb-6">
-            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-            Compassionate Care. Lasting Change.
+        <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full max-w-4xl mx-auto px-4 sm:px-6 text-center">
+
+          {/* Frosted glass panel — guarantees readability over any image */}
+          <div className="w-full max-w-3xl bg-black/45 backdrop-blur-md rounded-3xl px-6 sm:px-12 py-10 sm:py-14 border border-white/10 shadow-2xl">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm text-white/90 px-4 py-1.5 rounded-full text-sm font-medium border border-white/25 mb-6">
+              <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              Compassionate Care. Lasting Change.
+            </div>
+            {/* Heading */}
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] mb-5 tracking-tight drop-shadow-lg">
+              Your Mental Health<br/>
+              Is <span className="text-blue-300">Our Priority</span>
+            </h1>
+            {/* Subtitle */}
+            <p className="text-base sm:text-lg text-white/85 max-w-2xl mx-auto mb-8 leading-relaxed drop-shadow">
+              We provide personalized care for a healthier mind and a better tomorrow. Our team of psychiatrists and psychologists is here to support you.
+            </p>
+            {/* CTAs */}
+            <div className="flex gap-3 sm:gap-4 flex-wrap justify-center mb-8">
+              <Link href="/book" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-6 sm:px-8 py-3 rounded-xl font-semibold text-sm sm:text-base transition-all shadow-xl shadow-blue-900/50 hover:-translate-y-0.5">
+                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                Book Appointment
+              </Link>
+              <Link href="/about" className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 sm:px-8 py-3 rounded-xl font-semibold text-sm sm:text-base transition-all border border-white/40 hover:-translate-y-0.5">
+                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8z"/></svg>
+                Meet Our Team
+              </Link>
+            </div>
+            {/* Trust badges */}
+            <div className="flex gap-5 sm:gap-8 flex-wrap justify-center pt-5 border-t border-white/10">
+              {([
+                ["shield","Confidential & Safe"],
+                ["users","Expert Specialists"],
+                ["heart","Personalized Care"],
+              ] as [string,string][]).map(([iconKey,label])=>(
+                <div key={label} className="flex items-center gap-2 text-xs sm:text-sm font-medium text-white/80">
+                  <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" className="text-blue-300 shrink-0">
+                    {iconKey==="shield" && <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>}
+                    {iconKey==="users" && <><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></>}
+                    {iconKey==="heart" && <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>}
+                  </svg>
+                  {label}
+                </div>
+              ))}
+            </div>
           </div>
-          {/* Heading */}
-          <h1 className="text-3xl sm:text-5xl lg:text-7xl font-extrabold text-white leading-[1.1] mb-5 tracking-tight">
-            Your Mental Health<br/>
-            Is <span className="text-blue-300">Our Priority</span>
-          </h1>
-          {/* Subtitle */}
-          <p className="text-base sm:text-xl text-white/75 max-w-2xl mx-auto mb-8 leading-relaxed">
-            We provide personalized care for a healthier mind and a better tomorrow. Our team of psychiatrists and psychologists is here to support you.
-          </p>
-          {/* CTAs */}
-          <div className="flex gap-3 sm:gap-4 flex-wrap justify-center mb-10">
-            <Link href="/book" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-6 sm:px-8 py-3 rounded-xl font-semibold text-sm sm:text-base transition-all shadow-xl shadow-blue-900/40 hover:-translate-y-0.5">
-              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-              Book Appointment
-            </Link>
-            <Link href="/about" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-6 sm:px-8 py-3 rounded-xl font-semibold text-sm sm:text-base transition-all border border-white/30 hover:-translate-y-0.5">
-              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8z"/></svg>
-              Meet Our Team
-            </Link>
-          </div>
-          {/* Trust badges */}
-          <div className="flex gap-5 sm:gap-10 flex-wrap justify-center">
-            {([
-              ["shield","Confidential & Safe"],
-              ["users","Expert Specialists"],
-              ["heart","Personalized Care"],
-            ] as [string,string][]).map(([iconKey,label])=>(
-              <div key={label} className="flex items-center gap-2 text-xs sm:text-sm font-medium text-white/70">
-                <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" className="text-blue-300 shrink-0">
-                  {iconKey==="shield" && <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>}
-                  {iconKey==="users" && <><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></>}
-                  {iconKey==="heart" && <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>}
-                </svg>
-                {label}
-              </div>
-            ))}
-          </div>
+
         </div>
 
         {/* Scroll indicator pinned to bottom */}
