@@ -32,7 +32,14 @@ export default async function BlogPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
               {posts.map(post => (
                 <Link key={post.id} href={`/blog/${post.slug}`} className="card-hover overflow-hidden">
-                  <div className="h-44 bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-5xl">📖</div>
+                  <div className="h-44 bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-5xl relative overflow-hidden">
+                    {post.imageUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={post.imageUrl} alt={post.title} className="absolute inset-0 w-full h-full object-cover"/>
+                    ) : (
+                      <span>📖</span>
+                    )}
+                  </div>
                   <div className="p-5">
                     <span className="inline-block bg-blue-50 text-blue-600 text-xs font-semibold px-2.5 py-1 rounded-full border border-blue-100 mb-3">{post.category}</span>
                     <h3 className="font-semibold text-slate-900 leading-snug mb-2">{post.title}</h3>

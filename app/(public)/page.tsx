@@ -363,7 +363,8 @@ export default async function HomePage() {
                 </p>
               </div>
               <div className="flex items-center gap-4 mt-8 pt-6 border-t border-white/10">
-                <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm shrink-0">A.T</div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="https://i.pravatar.cc/96?img=47" alt="Patient" className="w-12 h-12 rounded-full object-cover shrink-0 ring-2 ring-blue-400/40"/>
                 <div>
                   <div className="text-white font-semibold text-sm">Anonymous Patient</div>
                   <div className="text-blue-300 text-xs mt-0.5">Anxiety &amp; Depression · 8 months</div>
@@ -375,10 +376,10 @@ export default async function HomePage() {
             {/* Two side testimonials */}
             <div className="lg:col-span-2 flex flex-col gap-5">
               {[
-                { text:"Dr. Okafor took the time to really listen. The medication he prescribed has changed my life. I finally feel stable after years of struggling.", by:"M.R.", label:"Bipolar Disorder · 1 year", color:"from-indigo-600/20 to-violet-600/10", border:"border-indigo-500/20" },
-                { text:"The telehealth option made it possible for me to get help. Dr. Nair is incredibly warm and skilled. My relationship has improved so much.", by:"S.K.", label:"Couples Therapy · 6 months", color:"from-violet-600/20 to-pink-600/10", border:"border-violet-500/20" },
+                { text:"Dr. Okafor took the time to really listen. The medication he prescribed has changed my life. I finally feel stable after years of struggling.", avatar:"https://i.pravatar.cc/96?img=11", label:"Bipolar Disorder · 1 year", color:"from-indigo-600/20 to-violet-600/10", border:"border-indigo-500/20" },
+                { text:"The telehealth option made it possible for me to get help. Dr. Nair is incredibly warm and skilled. My relationship has improved so much.", avatar:"https://i.pravatar.cc/96?img=9", label:"Couples Therapy · 6 months", color:"from-violet-600/20 to-pink-600/10", border:"border-violet-500/20" },
               ].map((t)=>(
-                <div key={t.by} className={`bg-gradient-to-br ${t.color} border ${t.border} rounded-2xl p-6 flex flex-col justify-between flex-1`}>
+                <div key={t.label} className={`bg-gradient-to-br ${t.color} border ${t.border} rounded-2xl p-6 flex flex-col justify-between flex-1`}>
                   <div>
                     <div className="flex gap-0.5 mb-3">
                       {"★★★★★".split("").map((s,i)=><span key={i} className="text-amber-400 text-sm">{s}</span>)}
@@ -386,7 +387,8 @@ export default async function HomePage() {
                     <p className="text-slate-200 text-sm leading-relaxed">"{t.text}"</p>
                   </div>
                   <div className="flex items-center gap-3 mt-5 pt-4 border-t border-white/10">
-                    <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white font-bold text-xs shrink-0">{t.by}</div>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={t.avatar} alt="Patient" className="w-9 h-9 rounded-full object-cover shrink-0 ring-2 ring-white/20"/>
                     <div className="text-xs">
                       <div className="text-white font-medium">Anonymous Patient</div>
                       <div className="text-slate-500 mt-0.5">{t.label}</div>
@@ -416,9 +418,14 @@ export default async function HomePage() {
                 {/* Featured article */}
                 <Link href={`/blog/${posts[0].slug}`} className="lg:col-span-3 group rounded-3xl overflow-hidden border border-slate-200 hover:border-blue-300 hover:shadow-xl transition-all duration-300 flex flex-col">
                   <div className="relative h-56 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 overflow-hidden">
-                    <div className="absolute inset-0 flex items-center justify-center opacity-10">
-                      <svg width="120" height="120" fill="none" stroke="white" strokeWidth="1" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-                    </div>
+                    {posts[0].imageUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={posts[0].imageUrl} alt={posts[0].title} className="absolute inset-0 w-full h-full object-cover"/>
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center opacity-10">
+                        <svg width="120" height="120" fill="none" stroke="white" strokeWidth="1" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                      </div>
+                    )}
                     <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/60 to-transparent">
                       <span className="inline-block bg-blue-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">{posts[0].category}</span>
                     </div>
@@ -440,8 +447,13 @@ export default async function HomePage() {
                 <div className="lg:col-span-2 flex flex-col gap-5">
                   {posts.slice(1,3).map((post,i)=>(
                     <Link key={post.id} href={`/blog/${post.slug}`} className="group flex gap-4 rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-lg transition-all duration-300 p-4 overflow-hidden flex-1">
-                      <div className={`w-20 shrink-0 rounded-xl bg-gradient-to-br ${i===0?"from-indigo-100 to-purple-100":"from-emerald-100 to-teal-100"} flex items-center justify-center`}>
-                        <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.5" className={i===0?"text-indigo-400":"text-emerald-500"} viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                      <div className={`w-20 h-20 shrink-0 rounded-xl overflow-hidden bg-gradient-to-br ${i===0?"from-indigo-100 to-purple-100":"from-emerald-100 to-teal-100"} flex items-center justify-center`}>
+                        {post.imageUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover"/>
+                        ) : (
+                          <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.5" className={i===0?"text-indigo-400":"text-emerald-500"} viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                        )}
                       </div>
                       <div className="flex flex-col justify-between min-w-0">
                         <div>
@@ -462,8 +474,13 @@ export default async function HomePage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {posts.map((post)=>(
                   <Link key={post.id} href={`/blog/${post.slug}`} className="group rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-lg transition-all overflow-hidden">
-                    <div className="h-40 bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-blue-300">
-                      <svg width="36" height="36" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                    <div className="h-40 bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-blue-300 overflow-hidden relative">
+                      {post.imageUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={post.imageUrl} alt={post.title} className="absolute inset-0 w-full h-full object-cover"/>
+                      ) : (
+                        <svg width="36" height="36" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                      )}
                     </div>
                     <div className="p-4">
                       <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">{post.category}</span>

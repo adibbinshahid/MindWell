@@ -22,7 +22,7 @@ export async function GET(req: Request) {
   const posts = await prisma.blogPost.findMany({
     where: { published: true },
     orderBy: { createdAt: "desc" },
-    select: { id: true, title: true, slug: true, category: true, excerpt: true, author: true, createdAt: true },
+    select: { id: true, title: true, slug: true, category: true, excerpt: true, author: true, imageUrl: true, createdAt: true },
   });
   return NextResponse.json(posts);
 }
@@ -31,11 +31,11 @@ export async function POST(req: Request) {
   const session = await requireAdmin();
   if (!session) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-  const { title, category, excerpt, body, published } = await req.json();
+  const { title, category, excerpt, body, imageUrl, published } = await req.json();
   const slug = slugify(title);
 
   const post = await prisma.blogPost.create({
-    data: { title, slug, category, excerpt, body, published: published ?? false, author: session.user.name },
+    data: { title, slug, category, excerpt, body, imageUrl: imageUrl || null, published: published ?? false, author: session.user.name },
   });
   return NextResponse.json(post, { status: 201 });
 }
@@ -44,10 +44,10 @@ export async function PATCH(req: Request) {
   const session = await requireAdmin();
   if (!session) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-  const { id, title, category, excerpt, body, published } = await req.json();
+  const { id, title, category, excerpt, body, imageUrl, published } = await req.json();
   const post = await prisma.blogPost.update({
     where: { id },
-    data: { title, category, excerpt, body, published },
+    data: { title, category, excerpt, body, imageUrl: imageUrl !== undefined ? (imageUrl || null) : undefined, published },
   });
   return NextResponse.json(post);
 }

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-type Post = { id: string; title: string; slug: string; category: string; excerpt: string; body: string; author: string; published: boolean; createdAt: string };
+type Post = { id: string; title: string; slug: string; category: string; excerpt: string; body: string; author: string; imageUrl?: string | null; published: boolean; createdAt: string };
 type View = "list" | "editor";
 
 const CATEGORIES = ["Anxiety","Depression","General","Therapy","Relationships","ADHD","Trauma"];
@@ -14,7 +14,7 @@ export default function BlogAdminClient({ initialPosts }: { initialPosts: Post[]
   const [saving, setSaving] = useState(false);
 
   function newPost() {
-    setEditing({ title:"", category:"General", excerpt:"", body:"", published:false });
+    setEditing({ title:"", category:"General", excerpt:"", body:"", imageUrl:"", published:false });
     setView("editor");
   }
   function editPost(p: Post) {
@@ -50,7 +50,7 @@ export default function BlogAdminClient({ initialPosts }: { initialPosts: Post[]
     await fetch("/api/blog", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: p.id, title: p.title, category: p.category, excerpt: p.excerpt, body: p.body, published: !p.published }),
+      body: JSON.stringify({ id: p.id, title: p.title, category: p.category, excerpt: p.excerpt, body: p.body, imageUrl: p.imageUrl, published: !p.published }),
     });
     router.refresh();
   }
@@ -90,6 +90,19 @@ export default function BlogAdminClient({ initialPosts }: { initialPosts: Post[]
                   <select className="form-control" value={editing.category ?? "General"} onChange={up("category")}>
                     {CATEGORIES.map(c=><option key={c}>{c}</option>)}
                   </select>
+                </div>
+                <div>
+                  <label className="form-label">Cover Image URL</label>
+                  <input
+                    className="form-control"
+                    value={editing.imageUrl ?? ""}
+                    onChange={up("imageUrl")}
+                    placeholder="https://example.com/image.jpg"
+                  />
+                  {editing.imageUrl && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={editing.imageUrl} alt="preview" className="mt-2 w-full h-28 object-cover rounded-lg border border-slate-200"/>
+                  )}
                 </div>
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input type="checkbox" checked={!!editing.published}
@@ -131,7 +144,19 @@ export default function BlogAdminClient({ initialPosts }: { initialPosts: Post[]
           <tbody className="divide-y divide-slate-100">
             {initialPosts.map(p=>(
               <tr key={p.id} className="hover:bg-slate-50 transition-colors">
-                <td className="px-5 py-3.5 font-medium max-w-xs"><span className="truncate block">{p.title}</span></td>
+                <td className="px-5 py-3.5 font-medium max-w-xs">
+                  <div className="flex items-center gap-3">
+                    {p.imageUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={p.imageUrl} alt="" className="w-10 h-10 rounded-lg object-cover shrink-0 border border-slate-200"/>
+                    ) : (
+                      <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-slate-400" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                      </div>
+                    )}
+                    <span className="truncate">{p.title}</span>
+                  </div>
+                </td>
                 <td className="px-5 py-3.5"><span className="bg-blue-50 text-blue-600 text-xs px-2 py-0.5 rounded-full">{p.category}</span></td>
                 <td className="px-5 py-3.5 text-slate-500 text-xs">{p.author}</td>
                 <td className="px-5 py-3.5">
