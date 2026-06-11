@@ -52,7 +52,7 @@ export default async function HomePage() {
           {/* Heading */}
           <h1 className="text-3xl sm:text-5xl lg:text-7xl font-extrabold text-white leading-[1.1] mb-5 tracking-tight drop-shadow-lg">
             Your Mental Health<br/>
-            Is <span className="text-blue-300">Our Priority</span>
+            Is <span className="text-blue-500">Our Priority</span>
           </h1>
           {/* Subtitle */}
           <p className="text-base sm:text-xl text-white/80 max-w-2xl mx-auto mb-8 leading-relaxed drop-shadow">
