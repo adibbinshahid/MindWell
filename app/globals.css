@@ -67,21 +67,3 @@
   .page-hero p  { @apply text-blue-100 mt-3 text-base sm:text-lg; }
 }
 
-/* Home page slideshow snap scroll */
-:root { --slide-h: calc(100svh - 108px); }
-
-.slides-wrapper {
-  height: var(--slide-h, calc(100vh - 108px));
-  overflow-y: scroll;
-  scroll-snap-type: y proximity;
-  scroll-behavior: smooth;
-}
-
-.slide-section {
-  height: var(--slide-h, calc(100vh - 108px));
-  min-height: var(--slide-h, calc(100vh - 108px));
-  scroll-snap-align: start;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
