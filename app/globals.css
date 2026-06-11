@@ -73,7 +73,7 @@
 .slides-wrapper {
   height: var(--slide-h, calc(100vh - 108px));
   overflow-y: scroll;
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
   scroll-behavior: smooth;
 }
 
@@ -81,7 +81,6 @@
   height: var(--slide-h, calc(100vh - 108px));
   min-height: var(--slide-h, calc(100vh - 108px));
   scroll-snap-align: start;
-  scroll-snap-stop: always;
   display: flex;
   flex-direction: column;
   overflow: hidden;
