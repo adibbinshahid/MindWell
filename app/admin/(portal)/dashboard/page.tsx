@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Admin Dashboard – MindWell" };
+export const metadata = { title: "Admin Dashboard" };
 
 export default async function AdminDashboard() {
   const session = await requireAdmin();

@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import BookingActions from "./BookingActions";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "All Bookings – Admin" };
+export const metadata = { title: "All Bookings" };
 
 export default async function AdminBookingsPage() {
   const session = await requireAdmin();

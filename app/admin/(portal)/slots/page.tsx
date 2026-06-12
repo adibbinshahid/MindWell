@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import SlotsClient from "./SlotsClient";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Manage Slots – Admin" };
+export const metadata = { title: "Manage Slots" };
 
 export default async function SlotsPage() {
   const session = await requireAdmin();

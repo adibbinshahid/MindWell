@@ -4,7 +4,7 @@ import SessionProvider from "@/components/SessionProvider";
 import { getSession } from "@/lib/auth";
 
 export const metadata: Metadata = {
-  title: { default: "MindWell – Psychiatrist & Psychologist Clinic", template: "%s – MindWell" },
+  title: { default: "MindWell | Psychiatrist & Psychologist Clinic", template: "MindWell | %s" },
   description: "Compassionate, evidence-based mental health care. Book with our psychiatrists and psychologists in New York or via telehealth.",
 };
 

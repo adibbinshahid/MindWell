@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import BlogAdminClient from "./BlogAdminClient";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Blog Editor – Admin" };
+export const metadata = { title: "Blog Editor" };
 
 export default async function AdminBlogPage() {
   const session = await requireAdmin();

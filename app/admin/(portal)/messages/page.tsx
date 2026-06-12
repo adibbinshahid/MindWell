@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Messages – Admin" };
+export const metadata = { title: "Messages" };
 
 export default async function MessagesPage() {
   const session = await requireAdmin();
