@@ -19,7 +19,7 @@ export default async function DashboardPage() {
     prisma.user.findUnique({ where: { id: session.user.id } }),
     prisma.appointment.findMany({
       where: { userId: session.user.id },
-      include: { doctor: { select: { name: true, role: true, initials: true } } },
+      include: { doctor: { select: { name: true, role: true, initials: true, photoUrl: true } } },
       orderBy: [{ date: "desc" }, { time: "asc" }],
     }),
   ]);
@@ -84,7 +84,12 @@ export default async function DashboardPage() {
                 {upcoming.map(a=>(
                   <div key={a.id} className="px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
                     <div className="flex items-center gap-4">
-                      <div className="w-11 h-11 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm shrink-0">{a.doctor.initials}</div>
+                      <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 bg-blue-100 flex items-center justify-center">
+                        {a.doctor.photoUrl
+                          // eslint-disable-next-line @next/next/no-img-element
+                          ? <img src={a.doctor.photoUrl} alt={a.doctor.name} className="w-full h-full object-cover object-top"/>
+                          : <span className="text-blue-600 font-bold text-sm">{a.doctor.initials}</span>}
+                      </div>
                       <div>
                         <p className="font-semibold text-sm">{a.doctor.name}</p>
                         <p className="text-xs text-blue-600">{a.doctor.role}</p>
@@ -111,7 +116,12 @@ export default async function DashboardPage() {
                 {past.map(a=>(
                   <div key={a.id} className="px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
                     <div className="flex items-center gap-4">
-                      <div className="w-11 h-11 bg-slate-100 rounded-full flex items-center justify-center text-slate-500 font-bold text-sm shrink-0">{a.doctor.initials}</div>
+                      <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 bg-slate-100 flex items-center justify-center">
+                        {a.doctor.photoUrl
+                          // eslint-disable-next-line @next/next/no-img-element
+                          ? <img src={a.doctor.photoUrl} alt={a.doctor.name} className="w-full h-full object-cover object-top"/>
+                          : <span className="text-slate-500 font-bold text-sm">{a.doctor.initials}</span>}
+                      </div>
                       <div>
                         <p className="font-semibold text-sm text-slate-700">{a.doctor.name}</p>
                         <p className="text-xs text-slate-500">{fmt(a.date)} · {a.time}</p>
