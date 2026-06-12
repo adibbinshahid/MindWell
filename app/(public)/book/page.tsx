@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import BookingWizard from "@/components/booking/BookingWizard";
 import type { Metadata } from "next";
 
@@ -16,7 +17,9 @@ export default function BookPage() {
       {/* Wizard fills remaining viewport */}
       <section className="flex-1 py-8 sm:py-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-full">
-          <BookingWizard />
+          <Suspense fallback={<div className="h-96 flex items-center justify-center text-slate-400 text-sm">Loading…</div>}>
+            <BookingWizard />
+          </Suspense>
         </div>
       </section>
     </div>

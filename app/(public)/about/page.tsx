@@ -1,11 +1,9 @@
-import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "About Us" };
 
 export default async function AboutPage() {
-  const doctors = await prisma.doctor.findMany({ where: { active: true }, orderBy: { name: "asc" } });
 
   return (
     <>
@@ -63,64 +61,15 @@ export default async function AboutPage() {
         </div>
       </div>
 
-      {/* Team */}
-      <section className="py-20" id="team">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-14">
-            <div className="section-tag">Our Specialists</div>
-            <h2 className="text-3xl font-bold mt-2">Meet the MindWell Team</h2>
+      {/* Team teaser */}
+      <section className="py-16 bg-slate-50">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div>
+            <div className="section-tag mb-2">Our Specialists</div>
+            <h2 className="text-2xl font-bold">Meet the MindWell Team</h2>
+            <p className="text-slate-500 mt-1 text-sm">Board-certified psychiatrists and psychologists, here for you.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
-            {doctors.map(doc => {
-              const tags: string[] = JSON.parse(doc.tags || "[]");
-              const langs: string[] = JSON.parse(doc.languages || "[]");
-              const days: string[] = JSON.parse(doc.availableDays || "[]");
-              return (
-                <div key={doc.id} className="card overflow-hidden hover:shadow-lg transition-all">
-                  <div className="flex gap-5 p-6">
-                    <div className="w-20 h-20 rounded-full overflow-hidden shrink-0 bg-blue-600 flex items-center justify-center">
-                      {(doc as {photoUrl?: string}).photoUrl ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={(doc as {photoUrl?: string}).photoUrl!} alt={doc.name} className="w-full h-full object-cover"/>
-                      ) : (
-                        <span className="text-white text-2xl font-bold">{doc.initials}</span>
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <h3 className="font-bold text-lg">{doc.name}</h3>
-                          <p className="text-blue-600 text-sm font-medium">{doc.title}</p>
-                        </div>
-                        <span className="bg-blue-600 text-white text-xs px-3 py-1 rounded-full font-semibold shrink-0">{doc.role}</span>
-                      </div>
-                      <p className="text-slate-600 text-sm mt-2 leading-relaxed line-clamp-3">{doc.bio}</p>
-                      <div className="flex gap-2 flex-wrap mt-3">
-                        {tags.map(t=><span key={t} className="bg-blue-50 text-blue-600 text-xs px-2.5 py-1 rounded-full font-medium">{t}</span>)}
-                      </div>
-                      <div className="flex items-center gap-4 mt-3 text-xs text-slate-500">
-                        <span className="flex items-center gap-1">
-                          <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-                          {days.join(", ")}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-                          {langs.join(", ")}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                          {doc.rating}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="px-6 pb-5">
-                    <Link href="/book" className="btn btn-primary btn-sm w-full justify-center">Book with {doc.name.split(" ")[0]} {doc.name.split(" ")[1]}</Link>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <Link href="/team" className="btn btn-primary shrink-0">Meet Our Specialists →</Link>
         </div>
       </section>
 

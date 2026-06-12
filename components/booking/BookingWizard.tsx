@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type Doctor = {
   id: string; name: string; title: string; role: string;
@@ -16,6 +16,7 @@ const DAY_NAMES = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 export default function BookingWizard() {
   const { data: session } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [step, setStep] = useState(1);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
@@ -37,6 +38,13 @@ export default function BookingWizard() {
   }, []);
 
   useEffect(() => {
+    const preselect = searchParams.get("doctor");
+    if (!preselect || doctors.length === 0) return;
+    const match = doctors.find(d => d.id === preselect);
+    if (match) { setSelectedDoctor(match); setStep(2); }
+  }, [doctors, searchParams]);
+
+  useEffect(() => {
     if (!selectedDoctor || !selectedDate) return;
     fetch(`/api/bookings?doctorId=${selectedDoctor.id}&date=${selectedDate}`)
       .then(r => r.json())
@@ -56,6 +64,7 @@ export default function BookingWizard() {
     const todayStr = fmtDate(today);
     const firstDay = new Date(calYear, calMonth, 1).getDay();
     const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+    const doctorDays: string[] = selectedDoctor ? JSON.parse(selectedDoctor.availableDays || "[]") : [];
     const cells = [];
 
     for (let i = 0; i < firstDay; i++) cells.push(<div key={`e${i}`}/>);
@@ -63,16 +72,18 @@ export default function BookingWizard() {
       const date = new Date(calYear, calMonth, d);
       const ds = fmtDate(date);
       const isPast = ds < todayStr;
+      const isDoctorOff = doctorDays.length > 0 && !doctorDays.includes(DAY_NAMES[date.getDay()]);
+      const isDisabled = isPast || isDoctorOff;
       const isSel = ds === selectedDate;
       const isToday = ds === todayStr;
       cells.push(
         <button
           key={ds} type="button"
-          onClick={() => { if (!isPast) { setSelectedDate(ds); setSelectedTime(null); }}}
+          onClick={() => { if (!isDisabled) { setSelectedDate(ds); setSelectedTime(null); }}}
           className={`w-9 h-9 rounded-full text-sm font-medium mx-auto flex items-center justify-center transition-colors
-            ${isPast ? "text-slate-300 cursor-not-allowed" : "cursor-pointer hover:bg-blue-50 hover:text-blue-600"}
+            ${isDisabled ? "text-slate-300 cursor-not-allowed" : "cursor-pointer hover:bg-blue-50 hover:text-blue-600"}
             ${isSel ? "bg-blue-600 text-white hover:bg-blue-600 hover:text-white" : ""}
-            ${isToday && !isSel ? "text-blue-600 font-bold" : ""}
+            ${isToday && !isSel && !isDisabled ? "text-blue-600 font-bold" : ""}
           `}
         >
           {d}
@@ -147,7 +158,7 @@ export default function BookingWizard() {
             <div key={n} className={`h-1.5 flex-1 rounded-full transition-colors ${n <= step ? "bg-blue-600" : "bg-slate-200"}`}/>
           ))}
         </div>
-        {selectedDoctor && <p className="text-xs text-slate-500 mt-2 truncate">👤 {selectedDoctor.name}{selectedDate ? ` · ${displayDate(selectedDate)}` : ""}{selectedTime ? ` · ${selectedTime}` : ""}</p>}
+        <p className="text-xs text-slate-500 mt-2 truncate min-h-[1rem]">{selectedDoctor ? `👤 ${selectedDoctor.name}${selectedDate ? ` · ${displayDate(selectedDate)}` : ""}${selectedTime ? ` · ${selectedTime}` : ""}` : ""}</p>
       </div>
 
       {/* Desktop sidebar */}
@@ -166,7 +177,7 @@ export default function BookingWizard() {
             </div>
             <div className="pt-0.5">
               <div className="text-sm font-medium">{label}</div>
-              {value && <div className="text-xs text-blue-600 mt-0.5 truncate max-w-[190px]">{value}</div>}
+              <div className={`text-xs mt-0.5 truncate max-w-[190px] min-h-[1rem] ${value ? "text-blue-600" : ""}`}>{value}</div>
             </div>
           </div>
         ))}
@@ -180,7 +191,7 @@ export default function BookingWizard() {
       </div>
 
       {/* Main panel */}
-      <div className="card p-5 sm:p-8">
+      <div className="card p-5 sm:p-8 flex flex-col min-h-[520px]">
         {error && (
           <div className="alert alert-error mb-6 text-sm">
             <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="shrink-0"><path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -190,7 +201,7 @@ export default function BookingWizard() {
 
         {/* Step 1 */}
         {step === 1 && (
-          <div>
+          <div className="flex flex-col flex-1">
             <h2 className="text-2xl font-bold mb-1">Choose Your Specialist</h2>
             <p className="text-slate-500 mb-6">Select the clinician who best matches your needs.</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -223,7 +234,7 @@ export default function BookingWizard() {
                 );
               })}
             </div>
-            <div className="flex justify-end mt-8">
+            <div className="flex justify-end mt-auto pt-6 border-t border-slate-200">
               <button onClick={() => setStep(2)} disabled={!selectedDoctor} className="btn btn-primary">Continue →</button>
             </div>
           </div>
@@ -231,7 +242,7 @@ export default function BookingWizard() {
 
         {/* Step 2 */}
         {step === 2 && (
-          <div>
+          <div className="flex flex-col flex-1">
             <h2 className="text-2xl font-bold mb-1">Select Date & Time</h2>
             <p className="text-slate-500 mb-6">Green slots are available. Grey slots are already booked.</p>
             <div className="flex flex-col lg:flex-row gap-8">
@@ -248,7 +259,7 @@ export default function BookingWizard() {
                 </div>
               </div>
               {/* Times */}
-              <div className="flex-1">
+              <div className="flex-1 min-h-[180px]">
                 {selectedDate ? (
                   <>
                     <h4 className="font-semibold mb-3 text-sm">{displayDate(selectedDate)}</h4>
@@ -279,7 +290,7 @@ export default function BookingWizard() {
                 )}
               </div>
             </div>
-            <div className="flex justify-between mt-8 pt-6 border-t border-slate-200">
+            <div className="flex justify-between mt-auto pt-6 border-t border-slate-200">
               <button onClick={() => setStep(1)} className="btn btn-outline">← Back</button>
               <button onClick={() => setStep(3)} disabled={!selectedDate || !selectedTime} className="btn btn-primary">Continue →</button>
             </div>
@@ -288,7 +299,7 @@ export default function BookingWizard() {
 
         {/* Step 3 */}
         {step === 3 && (
-          <div>
+          <div className="flex flex-col flex-1">
             <h2 className="text-2xl font-bold mb-1">Your Details</h2>
             <p className="text-slate-500 mb-6">Tell us about your visit.</p>
 
@@ -330,7 +341,7 @@ export default function BookingWizard() {
               </div>
             )}
 
-            <div className="flex justify-between mt-8 pt-6 border-t border-slate-200">
+            <div className="flex justify-between mt-auto pt-6 border-t border-slate-200">
               <button onClick={() => setStep(2)} className="btn btn-outline">← Back</button>
               <button onClick={() => setStep(4)} disabled={!patientType} className="btn btn-primary">Review →</button>
             </div>
@@ -339,7 +350,7 @@ export default function BookingWizard() {
 
         {/* Step 4 */}
         {step === 4 && selectedDoctor && selectedDate && selectedTime && (
-          <div>
+          <div className="flex flex-col flex-1">
             <h2 className="text-2xl font-bold mb-1">Confirm Your Booking</h2>
             <p className="text-slate-500 mb-6">Please review before confirming.</p>
 
@@ -363,7 +374,7 @@ export default function BookingWizard() {
               <div><strong>Next steps:</strong> You'll receive confirmation in your patient dashboard. A reminder will be sent 24 hours before. Cancel or reschedule up to 24 hours in advance.</div>
             </div>
 
-            <div className="flex justify-between pt-6 border-t border-slate-200">
+            <div className="flex justify-between mt-auto pt-6 border-t border-slate-200">
               <button onClick={() => setStep(3)} className="btn btn-outline">← Back</button>
               <button onClick={handleSubmit} disabled={submitting} className="btn btn-primary btn-lg">
                 {submitting ? "Confirming…" : "✓ Confirm Appointment"}

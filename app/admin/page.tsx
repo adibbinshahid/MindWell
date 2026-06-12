@@ -68,14 +68,13 @@ export default function AdminLoginPage() {
 
           <div className="p-8">
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-11 h-11 bg-blue-600 rounded-xl flex items-center justify-center shrink-0">
-                <svg className="text-white" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
-                </svg>
+              <div className="bg-white rounded-xl p-1.5 shrink-0">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/logo.png" alt="MindWell" className="h-10 w-auto" />
               </div>
               <div>
-                <h1 className="text-white font-bold text-lg leading-none">MindWell Admin</h1>
-                <p className="text-slate-500 text-xs mt-1">Clinic Management Portal</p>
+                <h1 className="text-white font-bold text-lg leading-none">Admin Portal</h1>
+                <p className="text-slate-500 text-xs mt-1">Clinic Management</p>
               </div>
             </div>
 

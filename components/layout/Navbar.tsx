@@ -17,7 +17,7 @@ const navLinks = [
       { href: "/conditions", label: "Conditions Treated" },
     ],
   },
-  { href: "/about#team", label: "Specialists" },
+  { href: "/team", label: "Specialists" },
   {
     label: "Resources",
     href: "/resources",
@@ -43,30 +43,9 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex items-center justify-between h-[72px] gap-4">
           {/* Brand */}
-          <Link href="/" className="flex items-center gap-3 shrink-0">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center shadow-md shadow-blue-200">
-              {/* Brain logo mark */}
-              <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke="white" strokeLinecap="round" strokeLinejoin="round">
-                {/* Left lobe */}
-                <path d="M16 7 C12.5 7 9.5 9 9 11.5 C8.5 13.5 9 15.5 10 17 C11 18.5 11 19.5 11 21 L16 21 Z" strokeWidth="1.75"/>
-                {/* Right lobe */}
-                <path d="M16 7 C19.5 7 22.5 9 23 11.5 C23.5 13.5 23 15.5 22 17 C21 18.5 21 19.5 21 21 L16 21 Z" strokeWidth="1.75"/>
-                {/* Center divide */}
-                <line x1="16" y1="8" x2="16" y2="21" strokeWidth="1.25"/>
-                {/* Cerebellum */}
-                <path d="M11 21 C11 23.5 13 25 16 25 C19 25 21 23.5 21 21" strokeWidth="1.75"/>
-                {/* Left wrinkle */}
-                <path d="M13 12 C12 13.5 12 16 13 17" strokeWidth="1.2"/>
-                {/* Right wrinkle */}
-                <path d="M19 12 C20 13.5 20 16 19 17" strokeWidth="1.2"/>
-              </svg>
-            </div>
-            <div>
-              <div className="font-extrabold text-slate-900 leading-none tracking-tight">
-                Mind<span className="text-blue-600">Well</span>
-              </div>
-              <div className="text-[10px] text-slate-400 leading-none mt-1 tracking-widest uppercase font-medium">Psychiatry &amp; Psychology</div>
-            </div>
+          <Link href="/" className="flex items-center shrink-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.png" alt="MindWell Psychological Clinic" className="h-[42px] w-auto" />
           </Link>
 
           {/* Desktop Nav */}

@@ -6,13 +6,11 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-6 pt-16 pb-0">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           <div>
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center">
-                <svg className="text-white" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
-                </svg>
+            <div className="mb-4">
+              <div className="inline-block bg-white rounded-xl p-2">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/logo.png" alt="MindWell Psychological Clinic" className="w-32 h-auto" />
               </div>
-              <span className="font-bold text-white">MindWell</span>
             </div>
             <p className="text-sm leading-relaxed mb-4">Compassionate, evidence-based mental health care for individuals, couples, and families.</p>
             <div className="bg-red-900/30 border border-red-800/40 rounded-xl p-4">
@@ -30,7 +28,7 @@ export default function Footer() {
           <div>
             <h4 className="text-white text-sm font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2.5 text-sm">
-              {[["Home","/"],["About Us","/about"],["Services","/services"],["Conditions Treated","/conditions"],["Book Appointment","/book"]].map(([label,href])=>(
+              {[["Home","/"],["About Us","/about"],["Our Team","/team"],["Services","/services"],["Conditions Treated","/conditions"],["Book Appointment","/book"]].map(([label,href])=>(
                 <li key={href}><Link href={href} className="hover:text-white transition-colors">{label}</Link></li>
               ))}
             </ul>

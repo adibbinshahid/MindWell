@@ -64,7 +64,7 @@ export default async function HomePage() {
               <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
               Book Appointment
             </Link>
-            <Link href="/about" className="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 backdrop-blur-sm text-white px-6 sm:px-8 py-3 rounded-xl font-semibold text-sm sm:text-base transition-all border border-white/35 hover:-translate-y-0.5">
+            <Link href="/team" className="inline-flex items-center gap-2 bg-white/15 hover:bg-white/25 backdrop-blur-sm text-white px-6 sm:px-8 py-3 rounded-xl font-semibold text-sm sm:text-base transition-all border border-white/35 hover:-translate-y-0.5">
               <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8z"/></svg>
               Meet Our Team
             </Link>
@@ -170,7 +170,7 @@ export default async function HomePage() {
                   { iconKey:"wind",        title:"Stress & Anxiety",      desc:"CBT-based coping strategies.",   tags:["CBT","Mindfulness"],         href:"/services#therapy" },
                   { iconKey:"file-text",   title:"New Patient Intake",    desc:"Online forms before first visit.",tags:["Quick","Paperless"],        href:"/resources#forms" },
                 ].map((s)=>(
-                  <Link key={s.title} href={s.href} className="bg-white border border-slate-200 rounded-xl p-4 hover:border-blue-300 hover:shadow-md hover:-translate-y-0.5 transition-all group">
+                  <Link key={s.title} href={s.href} className="bg-white border border-slate-200 rounded-xl p-4 hover:border-blue-300 hover:shadow-md hover:-translate-y-0.5 transition-all group flex flex-col items-center text-center">
                     <div className="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center mb-2.5">
                       <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                         {s.iconKey==="users"       && <><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></>}
@@ -183,7 +183,7 @@ export default async function HomePage() {
                     </div>
                     <h4 className="font-semibold text-slate-900 text-xs mb-1 leading-snug">{s.title}</h4>
                     <p className="text-[11px] text-slate-500 mb-2 leading-relaxed">{s.desc}</p>
-                    <div className="flex flex-wrap gap-1">
+                    <div className="flex flex-wrap gap-1 justify-center">
                       {s.tags.map(t=><span key={t} className="bg-blue-50 text-blue-600 text-[10px] px-1.5 py-0.5 rounded-full font-medium">{t}</span>)}
                     </div>
                   </Link>
@@ -226,50 +226,52 @@ export default async function HomePage() {
                 </div>
               </div>
 
-              {/* Right: detailed feature rows */}
-              <div className="lg:col-span-3 flex flex-col gap-3">
+              {/* Right: 2×2 feature cards */}
+              <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
                   {
-                    iconKey:"award", color:"blue",
+                    iconKey:"award",
+                    accent:"bg-blue-600 text-white",
                     title:"Board-Certified Specialists",
                     points:["Licensed psychiatrists & psychologists with 10+ years","Ongoing training in latest evidence-based protocols","Specialized in anxiety, mood disorders, trauma & ADHD"],
                   },
                   {
-                    iconKey:"lock", color:"slate",
+                    iconKey:"lock",
+                    accent:"bg-slate-800 text-white",
                     title:"Complete Privacy & Confidentiality",
                     points:["HIPAA-compliant encrypted patient records","Anonymous scheduling available on request","Zero data sharing — your story stays with us"],
                   },
                   {
-                    iconKey:"shield-check", color:"blue",
+                    iconKey:"shield-check",
+                    accent:"bg-blue-600 text-white",
                     title:"Evidence-Based Treatment Methods",
                     points:["CBT, DBT, EMDR, and mindfulness-based therapies","Medication management with continuous monitoring","Outcome tracking every 4 weeks to measure progress"],
                   },
                   {
-                    iconKey:"calendar", color:"emerald",
+                    iconKey:"calendar",
+                    accent:"bg-emerald-600 text-white",
                     title:"Accessible & Flexible Care",
-                    points:["In-person and telehealth sessions — same week availability","Most major insurance plans accepted","Sliding scale fees for those with financial need"],
+                    points:["In-person and telehealth — same week availability","Most major insurance plans accepted","Sliding scale fees for those with financial need"],
                   },
                 ].map((w)=>(
-                  <div key={w.title} className="flex gap-4 items-start p-4 rounded-xl bg-slate-50 hover:bg-blue-50/60 border border-transparent hover:border-blue-100 transition-all">
-                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${w.color==="emerald" ? "bg-emerald-100 text-emerald-700" : w.color==="slate" ? "bg-slate-800 text-white" : "bg-blue-600 text-white"}`}>
-                      <svg width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                  <div key={w.title} className="bg-white border border-slate-200 rounded-2xl p-5 hover:shadow-md hover:-translate-y-0.5 transition-all group">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${w.accent}`}>
+                      <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                         {w.iconKey==="award"        && <><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></>}
                         {w.iconKey==="lock"         && <><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></>}
                         {w.iconKey==="shield-check" && <><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9,12 11,14 15,10"/></>}
                         {w.iconKey==="calendar"     && <><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></>}
                       </svg>
                     </div>
-                    <div className="min-w-0">
-                      <h4 className="font-semibold text-slate-900 text-sm mb-1.5">{w.title}</h4>
-                      <ul className="space-y-1">
-                        {w.points.map(pt=>(
-                          <li key={pt} className="flex items-start gap-1.5 text-xs text-slate-600">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500 shrink-0 mt-0.5"><polyline points="20,6 9,17 4,12"/></svg>
-                            {pt}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                    <h4 className="font-bold text-slate-900 text-sm mb-2.5">{w.title}</h4>
+                    <ul className="space-y-1.5">
+                      {w.points.map(pt=>(
+                        <li key={pt} className="flex items-start gap-2 text-xs text-slate-500 leading-relaxed">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500 shrink-0 mt-0.5"><polyline points="20,6 9,17 4,12"/></svg>
+                          {pt}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 ))}
               </div>
@@ -320,14 +322,14 @@ export default async function HomePage() {
                           <span key={t} className="bg-blue-50 text-blue-600 text-xs px-2 py-0.5 rounded-full font-medium">{t}</span>
                         ))}
                       </div>
-                      <Link href="/book" className="btn btn-outline btn-sm w-full justify-center">Book</Link>
+                      <Link href={`/book?doctor=${doc.id}`} className="btn btn-outline btn-sm w-full justify-center">Book</Link>
                     </div>
                   </div>
                 );
               })}
             </div>
             <div className="text-center mt-7">
-              <Link href="/about#team" className="btn btn-outline">View All Specialists</Link>
+              <Link href="/team" className="btn btn-outline">View All Specialists</Link>
             </div>
           </div>
         </div>

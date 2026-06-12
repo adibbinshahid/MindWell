@@ -48,14 +48,12 @@ export default function AdminSidebar() {
 
   const SidebarContent = () => (
     <>
-      <div className="px-5 py-5 border-b border-slate-700/50 flex items-center gap-3">
-        <div className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center shrink-0">
-          <svg className="text-white" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
-          </svg>
+      <div className="px-5 py-4 border-b border-slate-700/50 flex items-center gap-3">
+        <div className="bg-white rounded-lg p-1 shrink-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="MindWell" className="h-9 w-auto" />
         </div>
         <div className="flex-1">
-          <div className="text-white font-bold text-sm">MindWell</div>
           <div className="text-slate-400 text-xs">Admin Portal</div>
         </div>
         {/* Close btn — mobile only */}
