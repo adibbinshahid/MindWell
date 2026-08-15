@@ -1,7 +1,7 @@
 # Supabase → Neon (Postgres) + Vercel Blob (uploads)
 
-**Status: migration complete locally.** Code, schema, and all data are on Neon.
-What's left is Vercel dashboard work — see [Remaining steps](#remaining-steps).
+**Status: code and data fully migrated and verified.** What's left is Vercel
+dashboard work — see [Remaining steps](#remaining-steps).
 
 **Why the switch:** Supabase's free plan pauses a project after ~7 days of
 inactivity and needs a manual unpause. Neon's free plan never pauses
@@ -13,80 +13,126 @@ endpoint existed only to work around the Supabase pause, so both were deleted.
 
 ## What was done
 
-**Database → Neon.** `prisma db push` created the schema, then every row was
-copied Supabase → Neon with a Prisma script. Verified equal on both sides:
+### Database → Neon
 
-| Table | Rows |
+`prisma db push` created the schema, then every row was copied across. Verified
+identical on both sides — schema, indexes, and every field of every row:
+
+| Check | Result |
 |---|---|
-| User | 12 |
-| Doctor | 4 |
-| Appointment | 118 |
-| BlogPost | 4 |
-| ContactMessage | 10 |
-| SiteContent | 1 |
-| IntakeForm / NewsletterSubscriber / BlockedSlot | 0 |
+| Column parity (9 tables) | ✓ identical |
+| Index / constraint parity | ✓ identical |
+| Row-level data parity | ✓ 149 rows byte-identical |
+| Orphaned foreign keys | ✓ 0 |
+
+Rows: 12 User, 4 Doctor, 118 Appointment, 4 BlogPost, 10 ContactMessage,
+1 SiteContent, 0 IntakeForm/NewsletterSubscriber/BlockedSlot.
 
 `prisma/schema.prisma` needed no changes — Neon is plain Postgres, and
-`directUrl` maps to Neon's non-pooled connection string.
+`directUrl` maps to Neon's non-pooled connection string. All IDs are cuids, so
+there are no sequences to reset.
 
-**Doctor photos → repo.** The four doctor portraits lived in Supabase Storage.
-They were downloaded while Supabase was still up, resized 1684px → 600px and
-converted to JPEG (12.5 MB → 249 KB total), committed to `public/doctors/`, and
-`Doctor.photoUrl` was repointed to `/doctors/*.jpg`. Zero rows in the database
-still reference Supabase. These are static files now — free, permanent, and
-independent of any blob store.
+### Images → repo
 
-**Future uploads → Vercel Blob.** [app/api/upload/route.ts](app/api/upload/route.ts)
-now uses `@vercel/blob` instead of the Supabase Storage REST API. This only
-matters for *new* images uploaded through the admin panel.
+Five images lived in Supabase Storage and would have 404'd the moment the
+project was deleted. All were pulled down while Supabase was still up:
 
-**Verified:** `npm run build` passes, `/api/doctors` serves Neon data, `/team`
-renders all four photos, and `/`, `/blog`, `/book`, `/login`, `/admin` all
-return 200 against Neon.
+- **4 doctor portraits** → `public/doctors/*.jpg`, resized 1684px → 600px
+  (12.5 MB → 249 KB), `Doctor.photoUrl` repointed
+- **Homepage hero background** → `public/hero-main.webp`, `SiteContent.hero_main`
+  repointed
+
+A sweep of **all 60 text columns across all 9 tables** now returns zero Supabase
+references — nothing is hiding in a blog body or JSON blob.
+
+These are static files served by Vercel: free, permanent, no blob store needed.
+
+### New uploads → Vercel Blob
+
+[app/api/upload/route.ts](app/api/upload/route.ts) now uses `@vercel/blob`
+instead of the Supabase Storage REST API. This only affects images uploaded
+through the admin panel *from now on*. The `public/uploads` filesystem fallback
+is kept for local dev.
+
+### Verified against Neon
+
+`npm run build` passes, and on a running server:
+
+- Admin login through NextAuth — bcrypt hashes migrated intact, `role: ADMIN` correct
+- Booking created (201), FK joins resolve, availability recalculates, double-book → 409
+- Patient registration → 201, contact form → 200, newsletter form → 303
+- Upload route: image accepted, non-image rejected (400)
+- Homepage hero and all four doctor photos render; zero `supabase` strings in served HTML
+
+All smoke-test rows were deleted afterwards; counts are back to the original 149.
 
 ---
 
 ## Remaining steps
 
-### 1. Create the Vercel Blob store
-
-Only needed so the admin panel can upload *new* images. Existing photos already
-work without it.
-
-1. Vercel dashboard → your project → **Storage** → **Create** → **Blob**
-2. Connect it to the project — Vercel injects `BLOB_READ_WRITE_TOKEN` into deploys
-3. For local dev, copy that token into `.env` as `BLOB_READ_WRITE_TOKEN`
-
-Without the token, uploads fall back to writing into `public/uploads` — fine
-locally, useless on Vercel (ephemeral filesystem).
-
-### 2. Update Vercel environment variables
+### 1. Update Vercel environment variables
 
 - **Set** `DATABASE_URL` → Neon **pooled** string (host contains `-pooler`)
 - **Set** `DIRECT_URL` → Neon **direct** string (no `-pooler`)
 - **Delete** `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `KEEP_ALIVE_TOKEN`
 - Leave `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` as-is
 
-Both Neon strings are in your local `.env` — copy from there.
+Both Neon strings are in your local `.env`.
 
-Also delete the `KEEP_ALIVE_TOKEN` and `SITE_URL` **GitHub Actions secrets**;
+Also delete the `KEEP_ALIVE_TOKEN` and `SITE_URL` **GitHub Actions secrets** —
 the workflow that used them is gone.
 
-### 3. Deploy and verify
+### 2. Push and deploy
 
-Push, let Vercel build, then check the live site: doctor photos load on `/team`,
-admin login works, and a test booking saves.
+### 3. Close the cutover gap ⚠️
 
-### 4. Rotate the Neon password
+Until step 1 lands, the **live site is still writing to Supabase**. Any booking,
+registration, or contact message submitted in the meantime exists only there.
 
-The Neon connection string was pasted into a chat, so treat it as exposed:
+After the deploy is live on Neon, run this once to sweep those stragglers over:
+
+```bash
+npx tsx prisma/migrate-from-supabase.ts "<supabaseDirectUrl>" "<neonUrl>"
+```
+
+It is idempotent — it copies only what's missing, rewrites any Supabase image
+URLs, and re-runs the full verification. Running it twice is harmless.
+
+### 4. Verify the live site
+
+Doctor photos on `/team`, homepage hero, admin login, and a test booking.
+
+### 5. Rotate the Neon password
+
+The connection string was pasted into a chat, so treat it as exposed:
 Neon → **Roles** → `neondb_owner` → **Reset password**, then update `.env` and
-the Vercel env vars with the new string.
+the Vercel env vars.
 
-### 5. Delete the Supabase project
+### 6. Delete the Supabase project
 
-Only after step 3 passes. Supabase → Settings → General → **Delete project**.
-Nothing depends on it anymore — data is on Neon, images are in the repo.
+Only after steps 3 and 4 pass. Supabase → Settings → General → **Delete project**.
+Then delete `prisma/migrate-from-supabase.ts` — it has no purpose after that.
+
+### Optional: Vercel Blob store
+
+Only needed for uploading *new* images through the admin panel. Existing images
+are static files and work without it.
+
+Vercel → Storage → **Create** → **Blob** → connect to project. Vercel injects
+`BLOB_READ_WRITE_TOKEN` into deploys; copy it into `.env` for local dev.
+
+---
+
+## Unrelated bug found along the way
+
+[app/api/newsletter/route.ts:7](app/api/newsletter/route.ts#L7) calls
+`req.text()` and then `req.json()` on the same request. The body stream is
+already consumed by the first call, so the JSON branch always yields `{}` and
+the endpoint returns `400 Email required`.
+
+The site's actual HTML form posts form-encoded data, which works — so this is
+only hit by JSON clients. Pre-existing, unrelated to this migration, not fixed
+here.
 
 ---
 
