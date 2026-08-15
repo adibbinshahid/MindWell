@@ -3,7 +3,7 @@ import { requireAdmin } from "@/lib/auth";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
 const MAX_BYTES = 5 * 1024 * 1024; // 5 MB
-const BUCKET = "mindwell-uploads";
+const PREFIX = "mindwell-uploads";
 
 export async function POST(req: Request) {
   const session = await requireAdmin();
@@ -20,32 +20,20 @@ export async function POST(req: Request) {
   const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
   const buffer = await file.arrayBuffer();
 
-  const supabaseUrl = process.env.SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  // ── Supabase Storage (production / Vercel) ────────────────────────────────
-  if (supabaseUrl && serviceKey) {
-    const res = await fetch(
-      `${supabaseUrl}/storage/v1/object/${BUCKET}/${filename}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${serviceKey}`,
-          "Content-Type": file.type,
-          "x-upsert": "false",
-        },
-        body: buffer,
-      }
-    );
-
-    if (!res.ok) {
-      const err = await res.text();
-      console.error("Supabase upload error:", err);
+  // ── Vercel Blob (production) ─────────────────────────────────────────────
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    try {
+      const { put } = await import("@vercel/blob");
+      const blob = await put(`${PREFIX}/${filename}`, buffer, {
+        access: "public",
+        contentType: file.type,
+        addRandomSuffix: false,
+      });
+      return NextResponse.json({ url: blob.url });
+    } catch (err) {
+      console.error("Vercel Blob upload error:", err);
       return NextResponse.json({ error: "Upload failed" }, { status: 500 });
     }
-
-    const publicUrl = `${supabaseUrl}/storage/v1/object/public/${BUCKET}/${filename}`;
-    return NextResponse.json({ url: publicUrl });
   }
 
   // ── Local filesystem fallback (dev only) ─────────────────────────────────
