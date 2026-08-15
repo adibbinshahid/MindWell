@@ -123,16 +123,18 @@ Vercel → Storage → **Create** → **Blob** → connect to project. Vercel in
 
 ---
 
-## Unrelated bug found along the way
+## Unrelated bug found along the way — fixed
 
-[app/api/newsletter/route.ts:7](app/api/newsletter/route.ts#L7) calls
-`req.text()` and then `req.json()` on the same request. The body stream is
-already consumed by the first call, so the JSON branch always yields `{}` and
-the endpoint returns `400 Email required`.
+`POST /api/newsletter` called `req.text()` and then `req.json()` on the same
+request. A body stream can only be read once, so `req.json()` always threw, the
+`.catch()` swallowed it into `{}`, and every JSON client got `400 Email
+required`. The site's own HTML form posts form-encoded data, so this only ever
+hit JSON callers — pre-existing and unrelated to the migration.
 
-The site's actual HTML form posts form-encoded data, which works — so this is
-only hit by JSON clients. Pre-existing, unrelated to this migration, not fixed
-here.
+Now reads the body once and parses it by content type. JSON requests get a JSON
+response; form posts keep their 303 redirect. Malformed JSON returns 400 rather
+than throwing a 500, non-string emails are rejected, and addresses are trimmed
+so `" a@b.com "` upserts onto the existing row instead of duplicating it.
 
 ---
 
