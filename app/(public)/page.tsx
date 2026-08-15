@@ -125,38 +125,6 @@ export default async function HomePage() {
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
           </a>
-
-          {/* Fiverr */}
-          <a
-            href="https://www.fiverr.com/adib_bin_shahid"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center gap-3 pl-2 pr-4 py-2 transition-all duration-250 hover:scale-[1.03] hover:shadow-lg"
-            style={{
-              background:"rgba(238,232,218,0.92)",
-              backdropFilter:"blur(24px) saturate(160%)",
-              WebkitBackdropFilter:"blur(24px) saturate(160%)",
-              border:"1px solid rgba(255,255,255,0.80)",
-              borderRadius:999,
-              boxShadow:"0 4px 24px rgba(0,0,0,0.35), 0 1px 0 rgba(255,255,255,0.90) inset",
-            }}
-          >
-            <div
-              className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
-              style={{background:"#1DBF73",boxShadow:"0 2px 8px rgba(29,191,115,0.45)"}}
-            >
-              <span style={{fontSize:9,fontWeight:800,color:"#fff",letterSpacing:"-0.03em",lineHeight:1}}>
-                fiverr<span style={{fontSize:12}}>.</span>
-              </span>
-            </div>
-            <div className="min-w-0">
-              <p style={{fontSize:9,letterSpacing:"0.18em",textTransform:"uppercase",color:"rgba(0,0,0,0.55)",lineHeight:1.2,fontWeight:700}}>Contact us on</p>
-              <p style={{fontSize:13,fontWeight:800,color:"rgba(0,0,0,0.88)",lineHeight:1.3,letterSpacing:"0.01em"}}>Fiverr</p>
-            </div>
-            <svg width="13" height="13" fill="none" stroke="rgba(0,0,0,0.40)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" className="ml-0.5 shrink-0 group-hover:translate-x-0.5 transition-transform duration-200">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </a>
         </div>
 
         {/* Scroll indicator pinned to bottom */}
